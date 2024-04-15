@@ -34,7 +34,7 @@ ansible_password=dacj6
 Create a YAML file for the playbook (setup.yml). This playbook will include tasks to install software, copy files, and configure settings on all Raspberry Pi nodes.
 
 ```yaml
-- name: Setup Raspberry Pi nodes
+- name: Scaffold MicroK8 Node Environment
   hosts: raspberry_pis
   become: yes
   tasks:
@@ -136,7 +136,7 @@ Create a YAML file for the playbook (setup.yml). This playbook will include task
       no_log: true
     
     - name: Install Docker & Docker Compose
-      shell: curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh && apt-get install -y docker-compose
+      shell: curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh && apt-get install -y docker-compose && rm get-docker.sh
       args:
         executable: /bin/bash
     
