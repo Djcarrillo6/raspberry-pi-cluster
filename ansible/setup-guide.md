@@ -63,16 +63,6 @@ Create a YAML file for the playbook (setup.yml). This playbook will include task
       args:
         executable: /bin/bash
     
-    - name: Install Node LTS
-      shell: . ~/.nvm/nvm.sh && nvm install --lts
-      args:
-        executable: /bin/bash
-    
-    - name: Set NVM to use LTS Node as the default
-      shell: . ~/.nvm/nvm.sh && nvm alias default 'lts/*'
-      args:
-        executable: /bin/bash
-    
     - name: Install Microsoft repository signing key and repository
       shell: >
         wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -103,21 +93,17 @@ Create a YAML file for the playbook (setup.yml). This playbook will include task
     
     - name: Include secret variables
       include_vars: secret_vars.yml
-      no_log: true # Prevents the token from appearing in Ansible logs.
+      no_log: true
     
-    - name: Configure Git username
+    - name: Configure Git username and email
       git_config:
-        name: user.name
-        value: Djcarrillo6
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
         scope: global
+      loop:
+        - { name: 'user.name', value: 'Djcarrillo6' }
+        - { name: 'user.email', value: 'djcarrillo06@gmail.com' }
     
-    - name: Configure Git email
-      git_config:
-        name: user.email
-        value: djcarrillo06@gmail.com
-        scope: global
-    
-    # This example uses the store helper, which stores credentials unencrypted on disk. For a more secure method, consider using cache or an external credential helper like Git Credential Manager or integrating with a system keychain.
     - name: Set Git to use stored credentials
       git_config:
         name: credential.helper

@@ -27,16 +27,6 @@
       args:
         executable: /bin/bash
     
-    - name: Install Node LTS
-      shell: . ~/.nvm/nvm.sh && nvm install --lts
-      args:
-        executable: /bin/bash
-    
-    - name: Set NVM to use LTS Node as the default
-      shell: . ~/.nvm/nvm.sh && nvm alias default 'lts/*'
-      args:
-        executable: /bin/bash
-    
     - name: Install Microsoft repository signing key and repository
       shell: >
         wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -69,17 +59,14 @@
       include_vars: secret_vars.yml
       no_log: true
     
-    - name: Configure Git username
+    - name: Configure Git username and email
       git_config:
-        name: user.name
-        value: Djcarrillo6
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
         scope: global
-    
-    - name: Configure Git email
-      git_config:
-        name: user.email
-        value: djcarrillo06@gmail.com
-        scope: global
+      loop:
+        - { name: 'user.name', value: 'Djcarrillo6' }
+        - { name: 'user.email', value: 'djcarrillo06@gmail.com' }
     
     - name: Set Git to use stored credentials
       git_config:
